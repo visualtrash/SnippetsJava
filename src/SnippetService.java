@@ -1,18 +1,19 @@
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
 public class SnippetService {
-    private List listOfSnippets;
+    private List<Snippet> listOfSnippets = new ArrayList<>();
 
     public Object add(String name, String text) {
         return new Object();
     }
-    
+
     public List find(String searchString) {
         return null;
     }
 
-    public boolean edit(Object snippet) {
+    public boolean update(UUID id, String name, String text) {
         return true;
     }
 

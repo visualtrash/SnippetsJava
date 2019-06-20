@@ -24,7 +24,9 @@ public class SnippetService {
 
     public boolean update(UUID id, String name, String text) {
         for (int i = 0; i < listOfSnippets.size(); i++) {
-            if (id.equals()
+            if(listOfSnippets.get(i).getId().equals(id)) {
+                
+            }
         }
         return true;
     }

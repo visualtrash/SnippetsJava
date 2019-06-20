@@ -5,9 +5,9 @@ import java.util.UUID;
 public class SnippetService {
     private List<Snippet> listOfSnippets = new ArrayList<>();
 
-    public Object add(String name, String text) {
+    public Snippet add(String name, String text) {
 
-        Snippet snippet = new Snippet("snippet","someCode");
+        Snippet snippet = new Snippet(name,text);
         listOfSnippets.add(snippet);
         return snippet;
     }
@@ -15,7 +15,7 @@ public class SnippetService {
     public Snippet find(String searchString) {
         Snippet result = null;
         for (int i = 0; i < listOfSnippets.size(); i++) {
-            if (listOfSnippets.contains(searchString)) {
+            if (listOfSnippets.get(i).getName().contains(searchString)) {
                 result = listOfSnippets.get(i);
             }
         }
@@ -32,6 +32,7 @@ public class SnippetService {
     public boolean remove(UUID id) {
         return true;
     }
-    
+
 }
+
 

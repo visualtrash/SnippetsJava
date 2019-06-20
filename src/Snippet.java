@@ -1,12 +1,20 @@
 import java.util.Date;
 import java.util.UUID;
 
+/**
+ * Этот класс описывает структуру хранимого куска кода
+ */
 public class Snippet {
+
     private String name;
     private String text;
     private Date creationDate;
     private UUID id;
 
+    /**
+     * @param name наименование снипета
+     * @param text текст сохраняемого кода
+     */
     Snippet(String name, String text) {
         this.name = name;
         this.text = text;

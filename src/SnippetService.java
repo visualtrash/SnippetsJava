@@ -3,6 +3,7 @@ import java.util.List;
 import java.util.UUID;
 
 public class SnippetService {
+
     private List<Snippet> listOfSnippets = new ArrayList<>();
 
     public Snippet add(String name, String text) {
@@ -25,7 +26,8 @@ public class SnippetService {
     public boolean update(UUID id, String name, String text) {
         for (int i = 0; i < listOfSnippets.size(); i++) {
             if(listOfSnippets.get(i).getId().equals(id)) {
-                
+                listOfSnippets.get(i).setText(text);
+                listOfSnippets.get(i).setName(name);
             }
         }
         return true;
@@ -36,5 +38,6 @@ public class SnippetService {
     }
 
 }
+
 
 

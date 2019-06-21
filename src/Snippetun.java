@@ -15,16 +15,17 @@ public class Snippetun {
             if (userCommand.toUpperCase().equals("add".toUpperCase())) {        //add
                 System.out.println("enter the name of snippet");
                 String nameUserSnippet = reader.readLine();
-                System.out.println("1");
+                //System.out.println("1");
                 System.out.println("enter the text of snippet");
                 String textUserSnippet = reader.readLine();
-                System.out.println("2");
+                //System.out.println("2");
                 snippetService.add(nameUserSnippet, textUserSnippet);
                 System.out.println("snippet was successfully added");
 
             }
             if (userCommand.toUpperCase().equals("EXIT")) break;
-            System.out.println("3");
+
         }
+        //System.out.println("3");
     }
 }

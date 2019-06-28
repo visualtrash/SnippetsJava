@@ -19,7 +19,7 @@ public class SnippetService {
     /**
      * @param filePath путь к файлу из которого нужно загрузить список снипетов
      */
-    public SnippetService(String filePath) throws IOException {
+    public SnippetService(String filePath) throws IOException, ParseException {
         listOfSnippets = loadSnippetsFromDisc("snippetun.bin");
     }
 
@@ -129,20 +129,15 @@ public class SnippetService {
         for (Snippet currentSnippet : listOfSnippets) {
             String currentSnippetLine =
                     currentSnippet.getName() + "<|>" + currentSnippet.getText() + "<|>" +
-                    currentSnippet.getId() + "<|>" + currentSnippet.getCreationDate();
+                            currentSnippet.getId() + "<|>" + currentSnippet.getCreationDate();
             result += currentSnippetLine + "\n";
         }
 
-        try {
-            FileOutputStream fileOutputStream = new FileOutputStream("snippetun.bin", false);
-            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
-            bufferedWriter.write(result);
-            fileOutputStream.close();
-            bufferedWriter.close();
-
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
+        FileOutputStream fileOutputStream = new FileOutputStream("snippetun.bin", false);
+        BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
+        bufferedWriter.write(result);
+        fileOutputStream.close();
+        bufferedWriter.close();
     }
 
     /**
@@ -151,37 +146,33 @@ public class SnippetService {
     // TODO: 28.06.2019 Реализовать метод loadSnippetsFromDisc, он считывает файл с диска
     //  и для каждой строки формирует объект снипета, который заполняется из частей строки.
     //  При реализации использовать метод Split
-    private List<Snippet> loadSnippetsFromDisc(String filePath) throws IOException {
-        try {
-            FileInputStream fileInputStream = new FileInputStream("snippetun.bin");
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
-            String fileLine;
-            ArrayList<Snippet> listOfSnippets = new ArrayList<>();
+    private List<Snippet> loadSnippetsFromDisc(String filePath) throws IOException, ParseException {
 
-            while ((fileLine = bufferedReader.readLine()) != null) {
+        FileInputStream fileInputStream = new FileInputStream("snippetun.bin");
+        BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
+        String fileLine;
+        ArrayList<Snippet> listOfSnippets = new ArrayList<>();
 
-                String[] snippetParamsArray = fileLine.split("<|>");
-                String name = snippetParamsArray[0];
-                String text = snippetParamsArray[1];
-                String idString = snippetParamsArray[2];
-                UUID id = UUID.fromString(idString);
-                String dateString = snippetParamsArray[3];
-                Date date = null;
-                try {
-                    date = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH).parse(dateString);
-                } catch (ParseException e) {
-                    e.printStackTrace();
-                }
+        while ((fileLine = bufferedReader.readLine()) != null) {
 
-                Snippet snippet = new Snippet(name, text, id, date);
-                listOfSnippets.add(snippet);
-            }
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            String[] snippetParamsArray = fileLine.split("<|>");
+            String name = snippetParamsArray[0];
+            String text = snippetParamsArray[1];
+            String idString = snippetParamsArray[2];
+            UUID id = UUID.fromString(idString);
+            String dateString = snippetParamsArray[3];
+            Date date = null;
+            date = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH).parse(dateString);
+
+            Snippet snippet = new Snippet(name, text, id, date);
+            listOfSnippets.add(snippet);
         }
         return listOfSnippets;
     }
 
+    SnippetService() throws IOException, ParseException {
+        this.listOfSnippets = loadSnippetsFromDisc("snippetun.bin");
+    }
 }
 
 

@@ -1,7 +1,7 @@
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 
 public class SnippetService {
@@ -122,9 +122,7 @@ public class SnippetService {
     /**
      * Сохранить коллекцию снипетов в файл на диск
      */
-    // TODO: 28.06.2019 Реализовать метод persist, для этого нужно сформировать сначала строковую переменную
-    //  в которую для каждого снипета в списке нужно добавить строку.
-    //  Строка формируется из всех свойств снипета, разделённых символом "<|>"
+
     public void persist() throws IOException {
         String result = "";
 
@@ -139,14 +137,12 @@ public class SnippetService {
             FileOutputStream fileOutputStream = new FileOutputStream("snippetun.bin", false);
             BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
             bufferedWriter.write(result);
-
             fileOutputStream.close();
             bufferedWriter.close();
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
-
     }
 
     /**
@@ -156,8 +152,34 @@ public class SnippetService {
     //  и для каждой строки формирует объект снипета, который заполняется из частей строки.
     //  При реализации использовать метод Split
     private List<Snippet> loadSnippetsFromDisc(String filePath) throws IOException {
-        return new ArrayList<>();
+        try {
+            FileInputStream fileInputStream = new FileInputStream("snippetun.bin");
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
+            String fileLine;
+            ArrayList<Snippet> listOfSnippets = new ArrayList<>();
 
+            while ((fileLine = bufferedReader.readLine()) != null) {
+
+                String[] snippetParamsArray = fileLine.split("<|>");
+                String name = snippetParamsArray[0];
+                String text = snippetParamsArray[1];
+                String idString = snippetParamsArray[2];
+                UUID id = UUID.fromString(idString);
+                String dateString = snippetParamsArray[3];
+                Date date = null;
+                try {
+                    date = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH).parse(dateString);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                Snippet snippet = new Snippet(name, text, id, date);
+                listOfSnippets.add(snippet);
+            }
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        return listOfSnippets;
     }
 
 }

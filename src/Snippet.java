@@ -24,6 +24,13 @@ public class Snippet implements Serializable {
         this.creationDate = new Date();
     }
 
+    Snippet(String name, String text, UUID id, Date creationDate) {
+        this.name = name;
+        this.text = text;
+        this.id = id;
+        this.creationDate = creationDate;
+    }
+
     public String getName() {
         return name;
     }
@@ -44,7 +51,7 @@ public class Snippet implements Serializable {
         return id;
     }
 
-    public String toString() {
-        return "ID: " + id + "<|>" + "NAME: " + name + "<|>" + "TEXT: " + text + "<|>" + "DATE: " + creationDate;
+    public Date getCreationDate() {
+        return creationDate;
     }
 }

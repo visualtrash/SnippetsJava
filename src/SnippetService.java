@@ -1,3 +1,4 @@
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -18,8 +19,8 @@ public class SnippetService {
     /**
      * @param filePath путь к файлу из которого нужно загрузить список снипетов
      */
-    public SnippetService(String filePath) {
-        listOfSnippets = loadSnippetsFromDisc(filePath);
+    public SnippetService(String filePath) throws IOException {
+        listOfSnippets = loadSnippetsFromDisc("snippetun.bin");
     }
 
     // todo написать для этого метода команду в консоли
@@ -121,14 +122,42 @@ public class SnippetService {
     /**
      * Сохранить коллекцию снипетов в файл на диск
      */
-    public void persist() {
+    // TODO: 28.06.2019 Реализовать метод persist, для этого нужно сформировать сначала строковую переменную
+    //  в которую для каждого снипета в списке нужно добавить строку.
+    //  Строка формируется из всех свойств снипета, разделённых символом "<|>"
+    public void persist() throws IOException {
+        String result = "";
+
+        for (Snippet currentSnippet : listOfSnippets) {
+            String currentSnippetLine =
+                    currentSnippet.getName() + "<|>" + currentSnippet.getText() + "<|>" +
+                    currentSnippet.getId() + "<|>" + currentSnippet.getCreationDate();
+            result += currentSnippetLine + "\n";
+        }
+
+        try {
+            FileOutputStream fileOutputStream = new FileOutputStream("snippetun.bin", false);
+            BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
+            bufferedWriter.write(result);
+
+            fileOutputStream.close();
+            bufferedWriter.close();
+
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     /**
      * Инициализировать коллекцию снипетов считав сериализованный список снипетов из файла
      */
-    private List<Snippet> loadSnippetsFromDisc(String filePath) {
+    // TODO: 28.06.2019 Реализовать метод loadSnippetsFromDisc, он считывает файл с диска
+    //  и для каждой строки формирует объект снипета, который заполняется из частей строки.
+    //  При реализации использовать метод Split
+    private List<Snippet> loadSnippetsFromDisc(String filePath) throws IOException {
         return new ArrayList<>();
+
     }
 
 }

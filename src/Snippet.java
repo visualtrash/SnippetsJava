@@ -1,15 +1,16 @@
+import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
 
 /**
  * Этот класс описывает структуру хранимого куска кода
  */
-public class Snippet {
+public class Snippet implements Serializable {
 
     private String name;
     private String text;
-    private Date creationDate;
     private UUID id;
+    private Date creationDate;
 
     /**
      * @param name наименование снипета
@@ -42,5 +43,8 @@ public class Snippet {
     public UUID getId() {
         return id;
     }
-}
 
+    public String toString() {
+        return "ID: " + id + "<|>" + "NAME: " + name + "<|>" + "TEXT: " + text + "<|>" + "DATE: " + creationDate;
+    }
+}

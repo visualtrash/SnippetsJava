@@ -1,12 +1,25 @@
 import java.io.*;
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 
 public class SnippetService {
 
     private List<Snippet> listOfSnippets;
+
+    /**
+     * @param filePath путь к файлу из которого нужно загрузить список снипетов
+     */
+    public SnippetService(String filePath) throws IOException, ParseException {
+        File savedDataFile = new File(filePath);
+        // if file already exists will do nothing
+        savedDataFile.createNewFile();
+
+        listOfSnippets = loadSnippetsFromDisc(savedDataFile);
+    }
 
     public Snippet add(String name, String text) {
         Snippet snippet = new Snippet(name, text);
@@ -14,13 +27,6 @@ public class SnippetService {
         listOfSnippets.add(snippet);
 
         return snippet;
-    }
-
-    /**
-     * @param filePath путь к файлу из которого нужно загрузить список снипетов
-     */
-    public SnippetService(String filePath) throws IOException, ParseException {
-        listOfSnippets = loadSnippetsFromDisc("snippetun.bin");
     }
 
     // todo написать для этого метода команду в консоли
@@ -59,10 +65,8 @@ public class SnippetService {
 
     }
 
-    // todo разбить на 2 метода - 1) обновить имя снипета 2) обновиить текст снипета
-    // todo для них сделать 2 разные команды для консоли
-    //изменение имени
-    public void updateName(UUID id, String name, String text) throws Exception {
+    // todo для них сделать команду для консоли
+    public void updateName(UUID id, String name) throws Exception {
         // флаг, обозначающий был ли найден сниппет в списке
         boolean snippetWasFounded = false;
 
@@ -81,8 +85,8 @@ public class SnippetService {
         }
     }
 
-    // изменение текста
-    public void updateText(UUID id, String name, String text) throws Exception {
+    // todo для них сделать команду для консоли
+    public void updateText(UUID id, String text) throws Exception {
         // флаг, обозначающий был ли найден сниппет в списке
         boolean snippetWasFounded = false;
 
@@ -122,21 +126,19 @@ public class SnippetService {
     /**
      * Сохранить коллекцию снипетов в файл на диск
      */
-
-    public void persist() throws IOException {
+    public void persist(String fileName) throws IOException {
         String result = "";
 
         for (Snippet currentSnippet : listOfSnippets) {
             String currentSnippetLine =
                     currentSnippet.getName() + "<|>" + currentSnippet.getText() + "<|>" +
-                            currentSnippet.getId() + "<|>" + currentSnippet.getCreationDate();
+                            currentSnippet.getId() + "<|>" + currentSnippet.getCreationDate().getTime();
             result += currentSnippetLine + "\n";
         }
 
-        FileOutputStream fileOutputStream = new FileOutputStream("snippetun.bin", false);
+        FileOutputStream fileOutputStream = new FileOutputStream(fileName, false);
         BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(fileOutputStream));
         bufferedWriter.write(result);
-        fileOutputStream.close();
         bufferedWriter.close();
     }
 
@@ -146,32 +148,27 @@ public class SnippetService {
     // TODO: 28.06.2019 Реализовать метод loadSnippetsFromDisc, он считывает файл с диска
     //  и для каждой строки формирует объект снипета, который заполняется из частей строки.
     //  При реализации использовать метод Split
-    private List<Snippet> loadSnippetsFromDisc(String filePath) throws IOException, ParseException {
+    private List<Snippet> loadSnippetsFromDisc(File savedDataFile) throws IOException, ParseException {
 
-        FileInputStream fileInputStream = new FileInputStream("snippetun.bin");
+        FileInputStream fileInputStream = new FileInputStream(savedDataFile);
         BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fileInputStream));
         String fileLine;
         ArrayList<Snippet> listOfSnippets = new ArrayList<>();
 
         while ((fileLine = bufferedReader.readLine()) != null) {
 
-            String[] snippetParamsArray = fileLine.split("<|>");
+            String[] snippetParamsArray = fileLine.split("<\\|>");
             String name = snippetParamsArray[0];
             String text = snippetParamsArray[1];
             String idString = snippetParamsArray[2];
             UUID id = UUID.fromString(idString);
             String dateString = snippetParamsArray[3];
-            Date date = null;
-            date = new SimpleDateFormat("MMMM d, yyyy", Locale.ENGLISH).parse(dateString);
+            Date date = new Date(Long.parseLong(dateString));
 
             Snippet snippet = new Snippet(name, text, id, date);
             listOfSnippets.add(snippet);
         }
         return listOfSnippets;
-    }
-
-    SnippetService() throws IOException, ParseException {
-        this.listOfSnippets = loadSnippetsFromDisc("snippetun.bin");
     }
 }
 

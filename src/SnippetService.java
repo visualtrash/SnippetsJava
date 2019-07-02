@@ -29,8 +29,6 @@ public class SnippetService {
         return snippet;
     }
 
-    // todo написать для этого метода команду в консоли
-
     /**
      * Найти снипеты в списке, по тексту в их названии
      *
@@ -85,7 +83,7 @@ public class SnippetService {
         }
     }
 
-    // todo для них сделать команду для консоли
+
     public void updateText(UUID id, String text) throws Exception {
         // флаг, обозначающий был ли найден сниппет в списке
         boolean snippetWasFounded = false;
@@ -145,9 +143,6 @@ public class SnippetService {
     /**
      * Инициализировать коллекцию снипетов считав сериализованный список снипетов из файла
      */
-    // TODO: 28.06.2019 Реализовать метод loadSnippetsFromDisc, он считывает файл с диска
-    //  и для каждой строки формирует объект снипета, который заполняется из частей строки.
-    //  При реализации использовать метод Split
     private List<Snippet> loadSnippetsFromDisc(File savedDataFile) throws IOException, ParseException {
 
         FileInputStream fileInputStream = new FileInputStream(savedDataFile);

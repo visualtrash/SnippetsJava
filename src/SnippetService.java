@@ -45,6 +45,7 @@ public class SnippetService {
                 findedSnippets.add(currentSnippet);
             }
         }
+            System.out.println(findedSnippets);
 
         return findedSnippets;
     }
@@ -58,12 +59,11 @@ public class SnippetService {
             System.out.println("--------------------------------");
             System.out.println("ID: " + snippetOfList.getId());
             System.out.println("--------------------------------");
-            System.out.println("TEXT: " + snippetOfList.getText());
+            System.out.println("TEXT: " + snippetOfList.getText() + "\n");
         }
 
     }
 
-    // todo для них сделать команду для консоли
     public void updateName(UUID id, String name) throws Exception {
         // флаг, обозначающий был ли найден сниппет в списке
         boolean snippetWasFounded = false;
@@ -151,7 +151,6 @@ public class SnippetService {
         ArrayList<Snippet> listOfSnippets = new ArrayList<>();
 
         while ((fileLine = bufferedReader.readLine()) != null) {
-
             String[] snippetParamsArray = fileLine.split("<\\|>");
             String name = snippetParamsArray[0];
             String text = snippetParamsArray[1];

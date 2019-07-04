@@ -20,19 +20,26 @@ public class Snippetun {
                 case Commands.ADD_COMMAND:
                     System.out.println("enter the name of snippet");
                     String nameUserSnippet = reader.readLine();
-
+                    // add text
                     System.out.println("enter the text of snippet");
                     String textUserSnippet = reader.readLine();
-
+                    // add name
                     snippetService.add(nameUserSnippet, textUserSnippet);
                     System.out.println("snippet was successfully added\n");
                     break;
                 case Commands.FIND_COMMAND:
-                    //todo
+                    snippetService.getAll();
+                    System.out.println("enter the snippet name to find");
+                    String enterFindString = reader.readLine();
+                    snippetService.find(enterFindString);
                     break;
                 case Commands.REMOVE_COMMAND:
-                    System.out.println("enter ID of snippet for delete");
-                    //todo
+                    System.out.println("enter ID of snippet for remove");
+                    String enterIdRemove = reader.readLine();
+                    UUID idRemove = UUID.fromString(enterIdRemove);
+
+                    snippetService.remove(idRemove);
+                    System.out.println("snippet was successfully removed\n");
                     break;
                 case Commands.UPDATE_COMMAND:
                     System.out.println("what do u want to update (NAME/TEXT)?");
@@ -60,7 +67,7 @@ public class Snippetun {
                             snippetService.updateText(id, text);
                             System.out.println("snippet was successfully updated\n");
                             break;
-                        } else System.out.println("unknown command. pls try again");
+                        } else System.out.println("unknown command. be carefully next time"); break;
                     }
                 case Commands.EXIT_COMMAND:
                     break outerCycle;

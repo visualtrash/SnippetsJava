@@ -36,10 +36,15 @@ public class Snippetun {
                 case Commands.REMOVE_COMMAND:
                     System.out.println("enter ID of snippet for remove");
                     String enterIdRemove = reader.readLine();
-                    UUID idRemove = UUID.fromString(enterIdRemove);
+                    try {
+                        UUID idRemove = UUID.fromString(enterIdRemove);
 
-                    snippetService.remove(idRemove);
-                    System.out.println("snippet was successfully removed\n");
+                        snippetService.remove(idRemove);
+                        System.out.println("snippet was successfully removed\n");
+                        break;
+                    } catch (IllegalArgumentException e) {
+                        System.out.println("invalid ID pls try again");
+                    }
                     break;
                 case Commands.UPDATE_COMMAND:
                     System.out.println("what do u want to update (NAME/TEXT)?");
@@ -56,7 +61,6 @@ public class Snippetun {
 
                             snippetService.updateName(id, name);
                             System.out.println("snippet was successfully updated\n");
-                            break;
                         } else if (userUpdateCommand.toUpperCase().equals("TEXT")) {
                             System.out.println("enter ID of snippet to update");
                             enterId = reader.readLine();
@@ -66,9 +70,10 @@ public class Snippetun {
 
                             snippetService.updateText(id, text);
                             System.out.println("snippet was successfully updated\n");
-                            break;
-                        } else System.out.println("unknown command. be carefully next time"); break;
+                        } else System.out.println("unknown command. be carefully next time");
+                        break;
                     }
+                    break;
                 case Commands.EXIT_COMMAND:
                     break outerCycle;
             }
